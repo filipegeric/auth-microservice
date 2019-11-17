@@ -38,3 +38,11 @@ export function getChangePasswordValidators() {
       .withMessage('New password has to be at least 6 characters long')
   ];
 }
+
+export function getForgotPasswordValidators() {
+  return [
+    body('email')
+      .exists()
+      .isEmail()
+  ];
+}

@@ -13,7 +13,12 @@ export async function authMiddleware(
   next: NextFunction
 ) {
   try {
-    const ignoredRoutes = ['/auth/login', '/auth/register', '/auth/refresh'];
+    const ignoredRoutes = [
+      '/auth/login',
+      '/auth/register',
+      '/auth/refresh',
+      '/auth/forgot-password'
+    ];
     if (ignoredRoutes.indexOf(req.url) > -1) {
       return next();
     }

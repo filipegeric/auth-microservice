@@ -10,6 +10,7 @@ services:
       - network
     depends_on:
       - db
+      - cache
     build: .
     environment:
       NODE_ENV: development
@@ -38,6 +39,15 @@ services:
       - 8080:80
     depends_on:
       - db
+    networks:
+      - network
+  cache:
+    image: redis
+    container_name: auth-cache
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/redis:/data
     networks:
       - network
 

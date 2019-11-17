@@ -6,9 +6,15 @@ import { config } from '../config';
 import { User } from '../entity/user.entity';
 import { HttpError } from '../error/http.error';
 import { verifyTokenAsync } from '../util/jwt.util';
+import { CacheService } from './cache.service';
+import { EmailService } from './email.service';
 
 export class AuthService {
-  constructor(private userRepository: Repository<User>) {}
+  constructor(
+    private userRepository: Repository<User>,
+    private cacheService: CacheService,
+    private emailService: EmailService
+  ) {}
 
   public async login(username: string, password: string) {
     const user = await this.userRepository.findOne({
@@ -80,6 +86,17 @@ export class AuthService {
       { password: hashedPassword }
     );
 
+    return true;
+  }
+
+  public async forgotPassword(email: string) {
+    const user = await this.userRepository.findOne({ email });
+    if (!user) {
+      throw new HttpError(404, 'No user with that email');
+    }
+    const code = Math.floor(Math.random() * (999999 - 100000)) + 100000;
+    await this.cacheService.storePasswordResetCode(email, code);
+    await this.emailService.sendPasswordResetMail(email, code);
     return true;
   }
 

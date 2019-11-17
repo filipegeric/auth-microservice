@@ -15,6 +15,7 @@ import { makeExpressCallback } from './util/express.util';
 import { generalValidator } from './validators';
 import {
   getChangePasswordValidators,
+  getForgotPasswordValidators,
   getLoginValidators,
   getRegisterValidators
 } from './validators/auth.validator';
@@ -80,6 +81,13 @@ createConnection()
       getChangePasswordValidators(),
       generalValidator,
       makeExpressCallback(authController, 'changePassword')
+    );
+
+    app.post(
+      '/auth/forgot-password',
+      getForgotPasswordValidators(),
+      generalValidator,
+      makeExpressCallback(authController, 'forgotPassword')
     );
 
     app.listen(config.PORT, () => {

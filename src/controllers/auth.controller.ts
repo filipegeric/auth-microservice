@@ -109,4 +109,17 @@ export class AuthController {
       }
     };
   }
+
+  public async forgotPassword(request: IHttpRequest): Promise<IHttpResponse> {
+    const email: string = request.body.email;
+
+    const ok = await this.authService.forgotPassword(email);
+
+    return {
+      status: 200,
+      data: {
+        ok
+      }
+    };
+  }
 }
