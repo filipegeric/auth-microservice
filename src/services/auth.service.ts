@@ -1,4 +1,4 @@
-import { verify } from 'argon2';
+import { hash, verify } from 'argon2';
 import { sign } from 'jsonwebtoken';
 import { Repository } from 'typeorm';
 
@@ -59,6 +59,27 @@ export class AuthService {
 
   public async logout(username: string) {
     await this.userRepository.increment({ username }, 'tokenVersion', 1);
+    return true;
+  }
+
+  public async changePassword(
+    username: string,
+    oldPassword: string,
+    newPassword: string
+  ) {
+    const user = await this.userRepository.findOneOrFail({
+      where: { username },
+      select: ['password']
+    });
+    if (!(await verify(user.password, oldPassword))) {
+      throw new HttpError(403, 'Old password invalid');
+    }
+    const hashedPassword = await hash(newPassword);
+    await this.userRepository.update(
+      { username },
+      { password: hashedPassword }
+    );
+
     return true;
   }
 

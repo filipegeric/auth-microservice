@@ -15,7 +15,8 @@ docker-compose up
 
 ## TODO
 
+0. Validation
 1. Change password
-2. Forgot password
-3. Forgot password submit
-4. users/me
+1. Forgot password
+1. Forgot password submit
+1. users/me

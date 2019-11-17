@@ -59,6 +59,11 @@ createConnection()
 
     app.post('/auth/logout', makeExpressCallback(authController, 'logout'));
 
+    app.post(
+      '/auth/change-password',
+      makeExpressCallback(authController, 'changePassword')
+    );
+
     app.listen(config.PORT, () => {
       logger.info(`Server working on port ${config.PORT}...`);
     });
