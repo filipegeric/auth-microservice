@@ -12,3 +12,10 @@ npm i
 docker-compose build
 docker-compose up
 ```
+
+## TODO
+
+1. Change password
+2. Forgot password
+3. Forgot password submit
+4. users/me
