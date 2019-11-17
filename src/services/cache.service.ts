@@ -12,4 +12,12 @@ export class CacheService {
       code
     );
   }
+
+  public async getPasswordResetCode(email: string) {
+    return this.redisClient.get(`password-reset:${email}`);
+  }
+
+  public async deletePasswordResetCode(email: string) {
+    return this.redisClient.del(`password-reset:${email}`);
+  }
 }

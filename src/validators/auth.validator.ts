@@ -46,3 +46,11 @@ export function getForgotPasswordValidators() {
       .isEmail()
   ];
 }
+
+export function getForgotPasswordSubmitValidators() {
+  return [
+    body('email').isEmail(),
+    body('code').isInt(),
+    body('password').isLength({ min: 6 })
+  ];
+}

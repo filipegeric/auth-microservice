@@ -122,4 +122,24 @@ export class AuthController {
       }
     };
   }
+
+  public async forgotPasswordSubmit(
+    request: IHttpRequest
+  ): Promise<IHttpResponse> {
+    const { email, code, password } = request.body;
+
+    const ok = await this.authService.forgotPasswordSubmit(
+      email,
+      parseInt(code, 10),
+      password
+    );
+
+    return {
+      status: 200,
+      data: {
+        ok,
+        message: 'Password succesfully changed'
+      }
+    };
+  }
 }

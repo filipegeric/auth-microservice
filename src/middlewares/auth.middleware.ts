@@ -17,7 +17,8 @@ export async function authMiddleware(
       '/auth/login',
       '/auth/register',
       '/auth/refresh',
-      '/auth/forgot-password'
+      '/auth/forgot-password',
+      '/auth/forgot-password-submit'
     ];
     if (ignoredRoutes.indexOf(req.url) > -1) {
       return next();

@@ -15,6 +15,4 @@ docker-compose up
 
 ## TODO
 
-1. Forgot password
-2. Forgot password submit
-3. users/me
+1. users/me

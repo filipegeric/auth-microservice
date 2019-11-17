@@ -100,6 +100,31 @@ export class AuthService {
     return true;
   }
 
+  public async forgotPasswordSubmit(
+    email: string,
+    code: number,
+    password: string
+  ) {
+    const codeFromCache = await this.cacheService.getPasswordResetCode(email);
+    if (!codeFromCache) {
+      throw new HttpError(
+        404,
+        "You haven't requested a password reset or it expired"
+      );
+    }
+    const parsedCode = parseInt(codeFromCache, 10);
+    await this.cacheService.deletePasswordResetCode(email);
+    if (parsedCode !== code) {
+      throw new HttpError(
+        400,
+        'Code invalid. You have to request password reset again'
+      );
+    }
+    const hashedPassword = await hash(password);
+    await this.userRepository.update({ email }, { password: hashedPassword });
+    return true;
+  }
+
   private createAccessToken(user: User) {
     return sign({ username: user.username }, config.JWT_ACCESS_TOKEN_SECRET, {
       expiresIn: config.JWT_ACCESS_TOKEN_EXPIRE
