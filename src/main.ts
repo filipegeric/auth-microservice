@@ -12,6 +12,12 @@ import { AuthController } from './controllers/auth.controller';
 import { UserController } from './controllers/user.controller';
 import { authMiddleware } from './middlewares/auth.middleware';
 import { makeExpressCallback } from './util/express.util';
+import { generalValidator } from './validators';
+import {
+  getChangePasswordValidators,
+  getLoginValidators,
+  getRegisterValidators
+} from './validators/auth.validator';
 
 interface Controllers {
   userController: UserController;
@@ -51,9 +57,19 @@ createConnection()
 
     app.get('/users/:username', makeExpressCallback(userController, 'getUser'));
 
-    app.post('/auth/register', makeExpressCallback(authController, 'register'));
+    app.post(
+      '/auth/register',
+      getRegisterValidators(),
+      generalValidator,
+      makeExpressCallback(authController, 'register')
+    );
 
-    app.post('/auth/login', makeExpressCallback(authController, 'login'));
+    app.post(
+      '/auth/login',
+      getLoginValidators(),
+      generalValidator,
+      makeExpressCallback(authController, 'login')
+    );
 
     app.post('/auth/refresh', makeExpressCallback(authController, 'refresh'));
 
@@ -61,6 +77,8 @@ createConnection()
 
     app.post(
       '/auth/change-password',
+      getChangePasswordValidators(),
+      generalValidator,
       makeExpressCallback(authController, 'changePassword')
     );
 
