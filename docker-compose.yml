@@ -1,6 +1,20 @@
 version: '2.1'
 
 services:
+  auth-microservice:
+    image: auth-microservice
+    container_name: auth-microservice
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - network
+    depends_on:
+      - db
+    build: .
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3000:3000
   db:
     image: mysql:8.0
     container_name: auth-db
@@ -15,6 +29,8 @@ services:
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - ./data/mysql:/var/lib/mysql
+    networks:
+      - network
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: auth-phpmyadmin
@@ -22,3 +38,9 @@ services:
       - 8080:80
     depends_on:
       - db
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge
