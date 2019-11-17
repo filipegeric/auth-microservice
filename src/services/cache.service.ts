@@ -20,4 +20,12 @@ export class CacheService {
   public async deletePasswordResetCode(email: string) {
     return this.redisClient.del(`password-reset:${email}`);
   }
+
+  public async incrementRequestCount(ip: string, windowInSeconds: number) {
+    const value = await this.redisClient.incr(`rate-limit:${ip}`);
+    if (value === 1) {
+      await this.redisClient.expire(`rate-limit:${ip}`, windowInSeconds);
+    }
+    return value;
+  }
 }

@@ -11,6 +11,7 @@ import { config } from './config';
 import { AuthController } from './controllers/auth.controller';
 import { UserController } from './controllers/user.controller';
 import { authMiddleware } from './middlewares/auth.middleware';
+import { makeRateLimitMiddleware } from './middlewares/rate-limit.middleware';
 import { makeExpressCallback } from './util/express.util';
 import { generalValidator } from './validators';
 import {
@@ -56,6 +57,13 @@ createConnection()
       userController,
       authController
     }: Controllers = require('./controllers');
+    const { cacheService } = require('./services');
+
+    const rateLimitMiddleware = makeRateLimitMiddleware(
+      cacheService,
+      config.RATE_LIMIT_COUNT,
+      config.RATE_LIMIT_WINDOW_IN_SECONDS
+    );
 
     app.get('/users/me', makeExpressCallback(userController, 'getMe'));
 
@@ -68,6 +76,7 @@ createConnection()
 
     app.post(
       '/auth/login',
+      rateLimitMiddleware,
       getLoginValidators(),
       generalValidator,
       makeExpressCallback(authController, 'login')

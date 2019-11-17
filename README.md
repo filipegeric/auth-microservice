@@ -15,5 +15,5 @@ docker-compose up
 
 ## TODO
 
-1. users/me
-2. rate limitter
+1. tests
+2. admin routes accesible with API key
