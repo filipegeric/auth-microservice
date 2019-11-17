@@ -88,13 +88,9 @@ export class AuthController {
   }
 
   public async changePassword(request: IHttpRequest): Promise<IHttpResponse> {
-    const username = request.username;
+    const username = request.username!;
     const oldPassword: string = request.body.oldPassword;
     const newPassword: string = request.body.newPassword;
-
-    if (!username) {
-      throw new HttpError(401, 'Unauthorized');
-    }
 
     const ok = await this.authService.changePassword(
       username,

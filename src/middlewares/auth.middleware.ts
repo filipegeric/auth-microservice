@@ -30,7 +30,7 @@ export async function authMiddleware(
       throw new HttpError(401, 'Token invalid');
     }
     const token = req.headers.authorization.split(' ')[1];
-    const decoded = await verifyTokenAsync(
+    const decoded = await verifyTokenAsync<{ username: string }>(
       token,
       config.JWT_ACCESS_TOKEN_SECRET
     );
@@ -41,7 +41,7 @@ export async function authMiddleware(
     if (!('username' in decoded)) {
       return res.status(401).send({ message: 'Token payload invalid' });
     }
-    (req as any).username = (decoded as any).username;
+    (req as any).username = decoded.username;
     return next();
   } catch (error) {
     logger.error(error);

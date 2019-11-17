@@ -44,4 +44,19 @@ describe('UserService', () => {
         .catch(() => done());
     });
   });
+
+  describe('createUser', () => {
+    it('throws if there is already a user with provided username', () => {
+      throw new Error('Not implemented yet');
+    });
+    it('throws if there is already a user with provided email', () => {
+      throw new Error('Not implemented yet');
+    });
+    it('creates user with hashed password', () => {
+      throw new Error('Not implemented yet');
+    });
+    it('saves user in database', () => {
+      throw new Error('Not implemented yet');
+    });
+  });
 });
