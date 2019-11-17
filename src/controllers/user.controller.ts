@@ -5,8 +5,8 @@ import { IHttpRequest, IHttpResponse } from '../types/http';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  public async getUser(request: IHttpRequest): Promise<IHttpResponse<any>> {
-    const username = request.params.username;
+  public async getMe(request: IHttpRequest): Promise<IHttpResponse<any>> {
+    const username = request.username!;
     const user = await this.userService.getUser(username);
     if (!user) {
       throw new HttpError(404, 'No such user');

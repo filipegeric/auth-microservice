@@ -57,7 +57,7 @@ createConnection()
       authController
     }: Controllers = require('./controllers');
 
-    app.get('/users/:username', makeExpressCallback(userController, 'getUser'));
+    app.get('/users/me', makeExpressCallback(userController, 'getMe'));
 
     app.post(
       '/auth/register',
