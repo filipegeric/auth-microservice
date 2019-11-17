@@ -5,6 +5,8 @@ export interface IHttpRequest {
   params: any;
   body: any;
   query: any;
+  cookies: any;
+  username?: string;
 }
 
 export interface IHttpResponse<T = any> {

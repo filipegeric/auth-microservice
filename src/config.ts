@@ -4,9 +4,9 @@ dotenvConfig();
 
 export const config = {
   PORT: +process.env.PORT! || 3000,
-  DB_HOST: process.env.DB_HOST!,
-  DB_PORT: +process.env.DB_PORT! || 3306,
-  DB_DATABASE: process.env.DB_DATABASE!,
-  DB_USER: process.env.DB_USER!,
-  DB_PASSWORD: process.env.DB_PASSWORD!
+  JWT_ACCESS_TOKEN_SECRET: process.env.JWT_ACCESS_TOKEN_SECRET!,
+  JWT_ACCESS_TOKEN_EXPIRE: process.env.JWT_ACCESS_TOKEN_EXPIRE!,
+  JWT_REFRESH_TOKEN_SECRET: process.env.JWT_REFRESH_TOKEN_SECRET!,
+  JWT_REFRESH_TOKEN_EXPIRE: process.env.JWT_REFRESH_TOKEN_EXPIRE!,
+  JWT_REFRESH_TOKEN_COOKIE_KEY: process.env.JWT_REFRESH_TOKEN_COOKIE_KEY!
 };
