@@ -19,6 +19,7 @@ describe('UserService', () => {
       const mockUser = new User(
         username,
         internet.password(),
+        internet.email(),
         name.firstName()
       );
 

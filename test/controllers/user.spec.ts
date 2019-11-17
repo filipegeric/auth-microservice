@@ -16,22 +16,27 @@ describe('User Controller', () => {
     controller = new UserController(userService);
   });
 
-  describe('getUser', () => {
+  describe('getMe', () => {
     it('returns a user and status code 200', async () => {
       const username = internet.userName();
-      const stubUser = new User(username, internet.password(), name.findName());
+      const stubUser = new User(
+        username,
+        internet.password(),
+        internet.email(),
+        name.findName()
+      );
 
       userRepository.findOne = stub().callsFake(() => {
         return stubUser;
       });
 
-      const response = await controller.getUser({
+      const response = await controller.getMe({
         body: null,
-        params: {
-          username
-        },
+        params: null,
         ip: internet.ip(),
-        query: null
+        query: null,
+        cookies: null,
+        username
       });
 
       expect(response.status).to.be.eql(200);
@@ -43,13 +48,15 @@ describe('User Controller', () => {
       userRepository.findOne = stub().throws();
 
       controller
-        .getUser({
+        .getMe({
           body: null,
           params: {
             username
           },
           ip: internet.ip(),
-          query: null
+          query: null,
+          cookies: null,
+          username
         })
         .then(done)
         .catch(() => done());
