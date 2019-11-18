@@ -17,3 +17,5 @@ docker-compose up
 
 1. tests
 2. admin routes accesible with API key
+3. API docs
+4. client library
