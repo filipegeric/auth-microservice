@@ -8,8 +8,6 @@ import { configure, getLogger } from 'log4js';
 import { createConnection } from 'typeorm';
 
 import { config } from './config';
-import { AuthController } from './controllers/auth.controller';
-import { UserController } from './controllers/user.controller';
 import { authMiddleware } from './middlewares/auth.middleware';
 import { makeRateLimitMiddleware } from './middlewares/rate-limit.middleware';
 import { makeExpressCallback } from './util/express.util';
@@ -21,11 +19,6 @@ import {
   getLoginValidators,
   getRegisterValidators
 } from './validators/auth.validator';
-
-interface Controllers {
-  userController: UserController;
-  authController: AuthController;
-}
 
 dotenvConfig();
 
@@ -44,7 +37,7 @@ configure({
 const logger = getLogger('main.ts');
 
 createConnection()
-  .then(() => {
+  .then(async () => {
     const app = express();
 
     app.use(bodyParser.json());
@@ -53,11 +46,8 @@ createConnection()
 
     app.use(authMiddleware);
 
-    const {
-      userController,
-      authController
-    }: Controllers = require('./controllers');
-    const { cacheService } = require('./services');
+    const { authController, userController } = await import('./controllers');
+    const { cacheService } = await import('./services');
 
     const rateLimitMiddleware = makeRateLimitMiddleware(
       cacheService,

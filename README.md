@@ -19,3 +19,5 @@ docker-compose up
 2. admin routes accesible with API key
 3. API docs
 4. client library
+5. social auth
+6. add routes folder
