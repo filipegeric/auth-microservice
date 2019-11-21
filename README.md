@@ -20,3 +20,4 @@ docker-compose up
 3. API docs
 4. client library
 5. social auth
+6. change jwt to private/public key pair

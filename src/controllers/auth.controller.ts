@@ -36,7 +36,7 @@ export class AuthController {
       },
       cookies: [
         {
-          key: config.JWT_REFRESH_TOKEN_COOKIE_KEY,
+          key: config.JWT.REFRESH_TOKEN_COOKIE_KEY,
           value: refreshToken,
           options: {
             httpOnly: true
@@ -47,7 +47,7 @@ export class AuthController {
   }
 
   public async refresh(request: IHttpRequest): Promise<IHttpResponse> {
-    const token: string = request.cookies[config.JWT_REFRESH_TOKEN_COOKIE_KEY];
+    const token: string = request.cookies[config.JWT.REFRESH_TOKEN_COOKIE_KEY];
     if (!token) {
       throw new HttpError(400, 'Missing refresh token in cookie');
     }
@@ -61,7 +61,7 @@ export class AuthController {
       },
       cookies: [
         {
-          key: config.JWT_REFRESH_TOKEN_COOKIE_KEY,
+          key: config.JWT.REFRESH_TOKEN_COOKIE_KEY,
           value: refreshToken,
           options: {
             httpOnly: true

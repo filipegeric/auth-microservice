@@ -33,7 +33,7 @@ export async function authMiddleware(
     const token = req.headers.authorization.split(' ')[1];
     const decoded = await verifyTokenAsync<{ email: string }>(
       token,
-      config.JWT_ACCESS_TOKEN_SECRET
+      config.JWT.ACCESS_TOKEN_PUBLIC
     );
 
     if (typeof decoded !== 'object') {

@@ -12,25 +12,25 @@ import { UserService } from './user.service';
 
 const cacheService = new CacheService(
   new Redis({
-    host: config.REDIS_HOST,
-    port: config.REDIS_PORT,
-    password: config.REDIS_PASSWORD
+    host: config.REDIS.HOST,
+    port: config.REDIS.PORT,
+    password: config.REDIS.PASSWORD
   })
 );
 const emailService = new EmailService(
   createTransport({
-    host: config.SMTP_HOST,
-    port: config.SMTP_PORT,
+    host: config.SMTP.HOST,
+    port: config.SMTP.PORT,
     auth: {
-      user: config.SMTP_USER,
-      pass: config.SMTP_PASSWORD
+      user: config.SMTP.USER,
+      pass: config.SMTP.PASSWORD
     }
   })
 );
 const userService = new UserService(userRepository);
 const authService = new AuthService(userRepository, cacheService, emailService);
 const googleService = new GoogleService(
-  new OAuth2Client({ clientId: config.GOOGLE_CLIENT_ID })
+  new OAuth2Client({ clientId: config.GOOGLE.CLIENT_ID })
 );
 
 export { userService, authService, cacheService, emailService, googleService };

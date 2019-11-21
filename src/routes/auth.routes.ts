@@ -30,8 +30,8 @@ export function setupAuthRoutes(
     '/auth/login',
     makeRateLimitMiddleware(
       cache,
-      config.RATE_LIMIT_COUNT,
-      config.RATE_LIMIT_WINDOW_IN_SECONDS
+      config.RATE_LIMIT.COUNT,
+      config.RATE_LIMIT.WINDOW_IN_SECONDS
     ),
     getLoginValidators(),
     generalValidator,

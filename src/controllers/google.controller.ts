@@ -26,7 +26,7 @@ export class GoogleController {
       },
       cookies: [
         {
-          key: config.JWT_REFRESH_TOKEN_COOKIE_KEY,
+          key: config.JWT.REFRESH_TOKEN_COOKIE_KEY,
           value: this.authService.createRefreshToken(user),
           options: {
             httpOnly: true

@@ -44,7 +44,7 @@ export class AuthService {
     const { email, tokenVersion } = await verifyTokenAsync<{
       email: string;
       tokenVersion: number;
-    }>(refreshToken, config.JWT_REFRESH_TOKEN_SECRET);
+    }>(refreshToken, config.JWT.REFRESH_TOKEN_PUBLIC);
 
     const user = await this.userRepository.findOne({
       where: {
@@ -127,17 +127,17 @@ export class AuthService {
   }
 
   public createAccessToken(user: User) {
-    return sign({ email: user.email }, config.JWT_ACCESS_TOKEN_SECRET, {
-      expiresIn: config.JWT_ACCESS_TOKEN_EXPIRE
+    return sign({ email: user.email }, config.JWT.ACCESS_TOKEN_SECRET, {
+      expiresIn: config.JWT.ACCESS_TOKEN_EXPIRE
     });
   }
 
   public createRefreshToken(user: User) {
     return sign(
       { email: user.email, tokenVersion: user.tokenVersion },
-      config.JWT_REFRESH_TOKEN_SECRET,
+      config.JWT.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: config.JWT_REFRESH_TOKEN_EXPIRE
+        expiresIn: config.JWT.REFRESH_TOKEN_EXPIRE
       }
     );
   }

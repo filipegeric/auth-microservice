@@ -9,7 +9,7 @@ export class GoogleService {
   public async verifyIdToken(idToken: string) {
     const loginTicket = await this.oAuthClient.verifyIdToken({
       idToken,
-      audience: config.GOOGLE_CLIENT_ID
+      audience: config.GOOGLE.CLIENT_ID
     });
 
     const tokenPayload = loginTicket.getPayload();

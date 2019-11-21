@@ -9,7 +9,7 @@ export class EmailService {
     const html = await this.getPasswordResetHtml(code);
     const text = this.getPasswordResetText(code);
     await this.emailClient.sendMail({
-      from: config.SMTP_USER,
+      from: config.SMTP.USER,
       to: email,
       subject: 'Password Reset',
       text,
