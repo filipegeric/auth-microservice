@@ -19,11 +19,15 @@ export class AuthService {
   public async login(email: string, password: string) {
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ['email', 'password', 'fullName', 'tokenVersion']
+      select: ['email', 'password', 'fullName', 'tokenVersion', 'isGoogleUser']
     });
 
     if (!user) {
       throw new HttpError(404, 'No user with that email');
+    }
+
+    if (user.isGoogleUser) {
+      throw new HttpError(403, 'You must use google to sign in');
     }
 
     if (!(await verify(user.password, password))) {
@@ -122,13 +126,13 @@ export class AuthService {
     return true;
   }
 
-  private createAccessToken(user: User) {
+  public createAccessToken(user: User) {
     return sign({ email: user.email }, config.JWT_ACCESS_TOKEN_SECRET, {
       expiresIn: config.JWT_ACCESS_TOKEN_EXPIRE
     });
   }
 
-  private createRefreshToken(user: User) {
+  public createRefreshToken(user: User) {
     return sign(
       { email: user.email, tokenVersion: user.tokenVersion },
       config.JWT_REFRESH_TOKEN_SECRET,

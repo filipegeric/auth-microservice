@@ -17,9 +17,23 @@ export class User {
   @Column({ default: 0, type: 'integer', select: false })
   public tokenVersion: number;
 
-  constructor(email: string, password: string, fullName: string) {
+  @Column({
+    name: 'is_google_user',
+    select: false,
+    default: false,
+    type: 'boolean'
+  })
+  public isGoogleUser: boolean;
+
+  constructor(
+    email: string,
+    password: string,
+    fullName: string,
+    isGoogleUser = false
+  ) {
     this.password = password;
     this.fullName = fullName;
     this.email = email;
+    this.isGoogleUser = isGoogleUser;
   }
 }

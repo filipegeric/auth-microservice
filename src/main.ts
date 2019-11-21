@@ -10,6 +10,7 @@ import { createConnection } from 'typeorm';
 import { config } from './config';
 import { authMiddleware } from './middlewares/auth.middleware';
 import { setupAuthRoutes } from './routes/auth.routes';
+import { setupGoogleRoutes } from './routes/google.routes';
 import { setupUserRoutes } from './routes/user.routes';
 
 dotenvConfig();
@@ -38,12 +39,16 @@ createConnection()
 
     app.use(authMiddleware);
 
-    const { authController, userController } = await import('./controllers');
+    const { authController, userController, googleController } = await import(
+      './controllers'
+    );
     const { cacheService } = await import('./services');
 
     setupUserRoutes(app, userController);
 
     setupAuthRoutes(app, authController, cacheService);
+
+    setupGoogleRoutes(app, googleController);
 
     app.listen(config.PORT, () => {
       logger.info(`Server working on port ${config.PORT}...`);

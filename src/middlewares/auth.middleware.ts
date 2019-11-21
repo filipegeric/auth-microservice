@@ -18,7 +18,8 @@ export async function authMiddleware(
       '/auth/register',
       '/auth/refresh',
       '/auth/forgot-password',
-      '/auth/forgot-password-submit'
+      '/auth/forgot-password-submit',
+      '/google/login'
     ];
     if (ignoredRoutes.indexOf(req.url) > -1) {
       return next();

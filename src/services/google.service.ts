@@ -17,10 +17,18 @@ export class GoogleService {
       throw new HttpError(400, 'Google token payload invalid');
     }
 
-    if (!tokenPayload.email_verified || !tokenPayload.email) {
+    if (!tokenPayload.email_verified) {
       throw new HttpError(403, 'Email is not verified');
     }
 
-    return tokenPayload;
+    if (!tokenPayload.email) {
+      throw new HttpError(400, 'Email is missing from token payload');
+    }
+
+    if (!tokenPayload.name) {
+      throw new HttpError(400, 'Name is missing from token payload');
+    }
+
+    return { email: tokenPayload.email, name: tokenPayload.name };
   }
 }
