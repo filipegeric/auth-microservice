@@ -6,7 +6,7 @@ export interface IHttpRequest {
   body: any;
   query: any;
   cookies: any;
-  username?: string;
+  email?: string;
 }
 
 export interface IHttpResponse<T = any> {

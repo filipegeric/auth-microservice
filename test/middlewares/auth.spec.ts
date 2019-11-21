@@ -19,11 +19,11 @@ describe('authMiddleware', () => {
     throw new Error('Not implemented yet');
   });
 
-  it('returns response with error if there is no username in token payload', () => {
+  it('returns response with error if there is no email in token payload', () => {
     throw new Error('Not implemented yet');
   });
 
-  it('attaches username to request', () => {
+  it('attaches email to request', () => {
     throw new Error('Not implemented yet');
   });
 });

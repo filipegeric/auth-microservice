@@ -11,13 +11,8 @@ export class AuthController {
   ) {}
 
   public async register(request: IHttpRequest): Promise<IHttpResponse> {
-    const { username, password, email, fullName } = request.body;
-    const user = await this.userService.createUser(
-      username,
-      password,
-      email,
-      fullName
-    );
+    const { password, email, fullName } = request.body;
+    const user = await this.userService.createUser(email, password, fullName);
 
     return {
       status: 200,
@@ -28,9 +23,9 @@ export class AuthController {
   }
 
   public async login(request: IHttpRequest): Promise<IHttpResponse> {
-    const { username, password } = request.body;
+    const { email, password } = request.body;
     const { accessToken, refreshToken } = await this.authService.login(
-      username,
+      email,
       password
     );
 
@@ -77,7 +72,7 @@ export class AuthController {
   }
 
   public async logout(request: IHttpRequest): Promise<IHttpResponse> {
-    const ok = await this.authService.logout(request.username!);
+    const ok = await this.authService.logout(request.email!);
 
     return {
       status: 200,
@@ -88,12 +83,12 @@ export class AuthController {
   }
 
   public async changePassword(request: IHttpRequest): Promise<IHttpResponse> {
-    const username = request.username!;
+    const email = request.email!;
     const oldPassword: string = request.body.oldPassword;
     const newPassword: string = request.body.newPassword;
 
     const ok = await this.authService.changePassword(
-      username,
+      email,
       oldPassword,
       newPassword
     );
