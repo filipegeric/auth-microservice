@@ -4,11 +4,38 @@ Since features like login and register are often used in web apps this microserv
 
 ## Installation
 
-```shell
+1. Clone the project
+
+```
 git clone https://github.com/filipegeric/auth-microservice
+```
+
+```
 cd auth-microservice
+```
+
+2. Make `.env` file and edit environment variables
+
+```
 cp .env.example .env
+```
+
+3. Create private and public keys for JWT
+
+```
+cd certs
+touch access-token-private-key.pem access-token-public-key.pem refresh-token-private-key.pem refresh-token-public-key.pem
+```
+
+4. Install dependencies
+
+```
 npm i
+```
+
+5. Build and run docker image
+
+```
 docker-compose build
 docker-compose up
 ```
@@ -19,5 +46,3 @@ docker-compose up
 2. admin routes accesible with API key
 3. API docs
 4. client library
-5. social auth
-6. change jwt to private/public key pair
