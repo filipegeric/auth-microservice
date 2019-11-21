@@ -21,19 +21,19 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('returns access token and refresh token', async () => {
-      const username = internet.userName();
+      const email = internet.email();
       const password = internet.password();
 
       userRepository.findOne = stub().callsFake(async () => {
         return {
-          username,
+          email,
           password: await hash(password),
           tokenVersion: 0
         };
       });
 
       const { accessToken, refreshToken } = await service.login(
-        username,
+        email,
         password
       );
 
@@ -41,7 +41,7 @@ describe('AuthService', () => {
       expect(typeof refreshToken).to.be.eql('string');
     });
 
-    it('throws if there is no user with provided username', () => {
+    it('throws if there is no user with provided email', () => {
       throw new Error('Not implemented yet');
     });
 
@@ -54,7 +54,7 @@ describe('AuthService', () => {
     it('returns access token and refresh token', () => {
       throw new Error('Not implemented yet');
     });
-    it('throws if there is no user with username from token', () => {
+    it('throws if there is no user with email from token', () => {
       throw new Error('Not implemented yet');
     });
     it("throws if token version from database doesn't match token version from token", () => {

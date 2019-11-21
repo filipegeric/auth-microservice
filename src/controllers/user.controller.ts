@@ -6,8 +6,8 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   public async getMe(request: IHttpRequest): Promise<IHttpResponse<any>> {
-    const username = request.username!;
-    const user = await this.userService.getUser(username);
+    const email = request.email!;
+    const user = await this.userService.getUser(email);
     if (!user) {
       throw new HttpError(404, 'No such user');
     }

@@ -2,10 +2,6 @@ import { body } from 'express-validator';
 
 export function getRegisterValidators() {
   return [
-    body(
-      'username',
-      'Username has to be at least 3 characters long.'
-    ).isLength({ min: 3 }),
     body('email')
       .exists()
       .isEmail(),
@@ -21,7 +17,6 @@ export function getRegisterValidators() {
 
 export function getLoginValidators() {
   return [
-    body('username', 'Username is required and has to be a string').isString(),
     body('password', 'Password is required and has to be a string').isString()
   ];
 }

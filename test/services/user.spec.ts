@@ -15,38 +15,33 @@ describe('UserService', () => {
   });
   describe('getUser', () => {
     it('returns a user', async () => {
-      const username = internet.userName();
-      const mockUser = new User(
-        username,
-        internet.password(),
-        internet.email(),
-        name.firstName()
-      );
+      const email = internet.email();
+      const mockUser = new User(email, internet.password(), name.firstName());
 
       userRepository.findOne = stub().callsFake(() => {
         return mockUser;
       });
 
-      const user = await service.getUser(username);
+      const user = await service.getUser(email);
 
       expect(user).to.be.instanceOf(User);
       expect(user).to.be.eql(mockUser);
     });
 
     it('fails if there is no user', done => {
-      const username = internet.userName();
+      const email = internet.email();
 
       userRepository.findOne = stub().throws();
 
       service
-        .getUser(username)
+        .getUser(email)
         .then(done)
         .catch(() => done());
     });
   });
 
   describe('createUser', () => {
-    it('throws if there is already a user with provided username', () => {
+    it('throws if there is already a user with provided email', () => {
       throw new Error('Not implemented yet');
     });
     it('throws if there is already a user with provided email', () => {

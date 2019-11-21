@@ -18,7 +18,8 @@ export async function authMiddleware(
       '/auth/register',
       '/auth/refresh',
       '/auth/forgot-password',
-      '/auth/forgot-password-submit'
+      '/auth/forgot-password-submit',
+      '/google/login'
     ];
     if (ignoredRoutes.indexOf(req.url) > -1) {
       return next();
@@ -30,7 +31,7 @@ export async function authMiddleware(
       throw new HttpError(401, 'Token invalid');
     }
     const token = req.headers.authorization.split(' ')[1];
-    const decoded = await verifyTokenAsync<{ username: string }>(
+    const decoded = await verifyTokenAsync<{ email: string }>(
       token,
       config.JWT_ACCESS_TOKEN_SECRET
     );
@@ -38,10 +39,10 @@ export async function authMiddleware(
     if (typeof decoded !== 'object') {
       return res.status(401).send({ message: 'Token payload invalid' });
     }
-    if (!('username' in decoded)) {
+    if (!('email' in decoded)) {
       return res.status(401).send({ message: 'Token payload invalid' });
     }
-    (req as any).username = decoded.username;
+    (req as any).email = decoded.email;
     return next();
   } catch (error) {
     logger.error(error);

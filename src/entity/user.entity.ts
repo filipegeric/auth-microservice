@@ -2,14 +2,14 @@ import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class User {
-  @Column({ unique: true, primary: true })
-  public username: string;
-
-  @Column({ select: false })
-  public password: string;
+  @Column({ primary: true, type: 'uuid' })
+  public id: string;
 
   @Column({ unique: true })
   public email: string;
+
+  @Column({ select: false })
+  public password: string;
 
   @Column({ name: 'full_name' })
   public fullName: string;
@@ -17,15 +17,23 @@ export class User {
   @Column({ default: 0, type: 'integer', select: false })
   public tokenVersion: number;
 
+  @Column({
+    name: 'is_google_user',
+    select: false,
+    default: false,
+    type: 'boolean'
+  })
+  public isGoogleUser: boolean;
+
   constructor(
-    username: string,
-    password: string,
     email: string,
-    fullName: string
+    password: string,
+    fullName: string,
+    isGoogleUser = false
   ) {
-    this.username = username;
     this.password = password;
     this.fullName = fullName;
     this.email = email;
+    this.isGoogleUser = isGoogleUser;
   }
 }

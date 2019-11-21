@@ -14,7 +14,7 @@ export function makeExpressCallback<T extends any>(
         params: req.params,
         query: req.query,
         cookies: req.cookies,
-        username: (req as any).username
+        email: (req as any).email
       };
       const response: IHttpResponse = await controller[action](request);
       if (response.headers) {

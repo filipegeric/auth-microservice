@@ -16,14 +16,18 @@ export class AuthService {
     private emailService: EmailService
   ) {}
 
-  public async login(username: string, password: string) {
+  public async login(email: string, password: string) {
     const user = await this.userRepository.findOne({
-      where: { username },
-      select: ['email', 'username', 'password', 'fullName', 'tokenVersion']
+      where: { email },
+      select: ['email', 'password', 'fullName', 'tokenVersion', 'isGoogleUser']
     });
 
     if (!user) {
-      throw new HttpError(404, 'No user with that username');
+      throw new HttpError(404, 'No user with that email');
+    }
+
+    if (user.isGoogleUser) {
+      throw new HttpError(403, 'You must use google to sign in');
     }
 
     if (!(await verify(user.password, password))) {
@@ -37,16 +41,16 @@ export class AuthService {
   }
 
   public async refresh(refreshToken: string) {
-    const { username, tokenVersion } = await verifyTokenAsync<{
-      username: string;
+    const { email, tokenVersion } = await verifyTokenAsync<{
+      email: string;
       tokenVersion: number;
     }>(refreshToken, config.JWT_REFRESH_TOKEN_SECRET);
 
     const user = await this.userRepository.findOne({
       where: {
-        username
+        email
       },
-      select: ['email', 'username', 'password', 'fullName', 'tokenVersion']
+      select: ['email', 'password', 'fullName', 'tokenVersion']
     });
 
     if (!user) {
@@ -63,28 +67,25 @@ export class AuthService {
     };
   }
 
-  public async logout(username: string) {
-    await this.userRepository.increment({ username }, 'tokenVersion', 1);
+  public async logout(email: string) {
+    await this.userRepository.increment({ email }, 'tokenVersion', 1);
     return true;
   }
 
   public async changePassword(
-    username: string,
+    email: string,
     oldPassword: string,
     newPassword: string
   ) {
     const user = await this.userRepository.findOneOrFail({
-      where: { username },
+      where: { email },
       select: ['password']
     });
     if (!(await verify(user.password, oldPassword))) {
       throw new HttpError(403, 'Old password invalid');
     }
     const hashedPassword = await hash(newPassword);
-    await this.userRepository.update(
-      { username },
-      { password: hashedPassword }
-    );
+    await this.userRepository.update({ email }, { password: hashedPassword });
 
     return true;
   }
@@ -125,15 +126,15 @@ export class AuthService {
     return true;
   }
 
-  private createAccessToken(user: User) {
-    return sign({ username: user.username }, config.JWT_ACCESS_TOKEN_SECRET, {
+  public createAccessToken(user: User) {
+    return sign({ email: user.email }, config.JWT_ACCESS_TOKEN_SECRET, {
       expiresIn: config.JWT_ACCESS_TOKEN_EXPIRE
     });
   }
 
-  private createRefreshToken(user: User) {
+  public createRefreshToken(user: User) {
     return sign(
-      { username: user.username, tokenVersion: user.tokenVersion },
+      { email: user.email, tokenVersion: user.tokenVersion },
       config.JWT_REFRESH_TOKEN_SECRET,
       {
         expiresIn: config.JWT_REFRESH_TOKEN_EXPIRE

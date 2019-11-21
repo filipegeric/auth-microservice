@@ -18,11 +18,9 @@ describe('User Controller', () => {
 
   describe('getMe', () => {
     it('returns a user and status code 200', async () => {
-      const username = internet.userName();
       const stubUser = new User(
-        username,
-        internet.password(),
         internet.email(),
+        internet.password(),
         name.findName()
       );
 
@@ -36,27 +34,27 @@ describe('User Controller', () => {
         ip: internet.ip(),
         query: null,
         cookies: null,
-        username
+        email: stubUser.email
       });
 
       expect(response.status).to.be.eql(200);
       expect(response.data).to.be.eql(stubUser);
     });
 
-    it('fails when there is no user with provided username', done => {
-      const username = internet.userName();
+    it('fails when there is no user with provided email', done => {
+      const email = internet.email();
       userRepository.findOne = stub().throws();
 
       controller
         .getMe({
           body: null,
           params: {
-            username
+            email
           },
           ip: internet.ip(),
           query: null,
           cookies: null,
-          username
+          email
         })
         .then(done)
         .catch(() => done());
