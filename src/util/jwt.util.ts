@@ -4,10 +4,10 @@ import { HttpError } from '../error/http.error';
 
 export function verifyTokenAsync<T = any>(
   token: string,
-  secret: string
+  key: string | Buffer
 ): Promise<T> {
   return new Promise((resolve, reject) => {
-    verify(token, secret, (err, payload) => {
+    verify(token, key, (err, payload) => {
       if (err) {
         if (err instanceof TokenExpiredError) {
           return reject(new HttpError(401, 'Token expired'));

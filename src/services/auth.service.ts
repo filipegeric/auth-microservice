@@ -128,7 +128,8 @@ export class AuthService {
 
   public createAccessToken(user: User) {
     return sign({ email: user.email }, config.JWT.ACCESS_TOKEN_SECRET, {
-      expiresIn: config.JWT.ACCESS_TOKEN_EXPIRE
+      expiresIn: config.JWT.ACCESS_TOKEN_EXPIRE,
+      algorithm: 'RS256'
     });
   }
 
@@ -137,7 +138,8 @@ export class AuthService {
       { email: user.email, tokenVersion: user.tokenVersion },
       config.JWT.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: config.JWT.REFRESH_TOKEN_EXPIRE
+        expiresIn: config.JWT.REFRESH_TOKEN_EXPIRE,
+        algorithm: 'RS256'
       }
     );
   }
