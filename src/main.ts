@@ -9,16 +9,8 @@ import { createConnection } from 'typeorm';
 
 import { config } from './config';
 import { authMiddleware } from './middlewares/auth.middleware';
-import { makeRateLimitMiddleware } from './middlewares/rate-limit.middleware';
-import { makeExpressCallback } from './util/express.util';
-import { generalValidator } from './validators';
-import {
-  getChangePasswordValidators,
-  getForgotPasswordSubmitValidators,
-  getForgotPasswordValidators,
-  getLoginValidators,
-  getRegisterValidators
-} from './validators/auth.validator';
+import { setupAuthRoutes } from './routes/auth.routes';
+import { setupUserRoutes } from './routes/user.routes';
 
 dotenvConfig();
 
@@ -49,53 +41,9 @@ createConnection()
     const { authController, userController } = await import('./controllers');
     const { cacheService } = await import('./services');
 
-    const rateLimitMiddleware = makeRateLimitMiddleware(
-      cacheService,
-      config.RATE_LIMIT_COUNT,
-      config.RATE_LIMIT_WINDOW_IN_SECONDS
-    );
+    setupUserRoutes(app, userController);
 
-    app.get('/users/me', makeExpressCallback(userController, 'getMe'));
-
-    app.post(
-      '/auth/register',
-      getRegisterValidators(),
-      generalValidator,
-      makeExpressCallback(authController, 'register')
-    );
-
-    app.post(
-      '/auth/login',
-      rateLimitMiddleware,
-      getLoginValidators(),
-      generalValidator,
-      makeExpressCallback(authController, 'login')
-    );
-
-    app.post('/auth/refresh', makeExpressCallback(authController, 'refresh'));
-
-    app.post('/auth/logout', makeExpressCallback(authController, 'logout'));
-
-    app.post(
-      '/auth/change-password',
-      getChangePasswordValidators(),
-      generalValidator,
-      makeExpressCallback(authController, 'changePassword')
-    );
-
-    app.post(
-      '/auth/forgot-password',
-      getForgotPasswordValidators(),
-      generalValidator,
-      makeExpressCallback(authController, 'forgotPassword')
-    );
-
-    app.post(
-      '/auth/forgot-password-submit',
-      getForgotPasswordSubmitValidators(),
-      generalValidator,
-      makeExpressCallback(authController, 'forgotPasswordSubmit')
-    );
+    setupAuthRoutes(app, authController, cacheService);
 
     app.listen(config.PORT, () => {
       logger.info(`Server working on port ${config.PORT}...`);
