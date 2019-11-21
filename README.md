@@ -21,3 +21,4 @@ docker-compose up
 4. client library
 5. social auth
 6. add routes folder
+7. change port numbers

@@ -15,13 +15,13 @@ services:
     environment:
       NODE_ENV: development
     ports:
-      - 3000:3000
+      - 4010:3000
   db:
     image: mysql:8.0
     container_name: auth-db
     command: --default-authentication-plugin=mysql_native_password
-    ports:
-      - 3306:3306
+    expose:
+      - 3306
     restart: always
     environment:
       MYSQL_USER: dev
@@ -44,8 +44,8 @@ services:
   cache:
     image: redis
     container_name: auth-cache
-    ports:
-      - 6379:6379
+    expose:
+      - 6379
     volumes:
       - ./data/redis:/data
     networks:
