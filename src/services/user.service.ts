@@ -9,7 +9,19 @@ export class UserService {
   constructor(private userRepository: Repository<User>) {}
 
   public async getUser(email: string) {
-    return this.userRepository.findOne({ email });
+    return this.userRepository.findOne(
+      { email },
+      {
+        select: [
+          'email',
+          'password',
+          'fullName',
+          'id',
+          'tokenVersion',
+          'isGoogleUser'
+        ]
+      }
+    );
   }
 
   public async createUser(
