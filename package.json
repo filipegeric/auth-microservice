@@ -8,6 +8,7 @@
     "build": "tsc",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/main.ts --delay 1",
     "dev-win": "nodemon --watch src/**/*.ts --exec ts-node src\\main.ts --delay 1",
+    "test:setup": "ts-node test/setup.ts",
     "test": "export NODE_ENV=test && mocha -r ts-node/register test/**/*.spec.ts",
     "test-win": "mocha -r ts-node/register test/**/*.spec.ts",
     "lint": "tslint -c tslint.json -p tsconfig.json",
