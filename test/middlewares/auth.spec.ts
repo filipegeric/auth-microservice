@@ -4,6 +4,7 @@ import { Response } from 'express-serve-static-core';
 import { internet } from 'faker';
 import { sign } from 'jsonwebtoken';
 import sinon from 'sinon';
+import uuid from 'uuid/v4';
 
 import { config } from '../../src/config';
 import { authMiddleware } from '../../src/middlewares/auth.middleware';
@@ -168,7 +169,8 @@ describe('authMiddleware', () => {
 
   it('attaches email to request', async () => {
     const email = internet.email();
-    const token = sign({ email }, config.JWT.ACCESS_TOKEN_SECRET, {
+    const userId = uuid();
+    const token = sign({ email, userId }, config.JWT.ACCESS_TOKEN_SECRET, {
       algorithm: 'RS256'
     });
     const req: any = {

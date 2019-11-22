@@ -19,7 +19,14 @@ export class AuthService {
   public async login(email: string, password: string) {
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ['email', 'password', 'fullName', 'tokenVersion', 'isGoogleUser']
+      select: [
+        'id',
+        'email',
+        'password',
+        'fullName',
+        'tokenVersion',
+        'isGoogleUser'
+      ]
     });
 
     if (!user) {
@@ -50,7 +57,7 @@ export class AuthService {
       where: {
         email
       },
-      select: ['email', 'password', 'fullName', 'tokenVersion']
+      select: ['id', 'email', 'password', 'fullName', 'tokenVersion']
     });
 
     if (!user) {
@@ -127,15 +134,19 @@ export class AuthService {
   }
 
   public createAccessToken(user: User) {
-    return sign({ email: user.email }, config.JWT.ACCESS_TOKEN_SECRET, {
-      expiresIn: config.JWT.ACCESS_TOKEN_EXPIRE,
-      algorithm: 'RS256'
-    });
+    return sign(
+      { email: user.email, userId: user.id },
+      config.JWT.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: config.JWT.ACCESS_TOKEN_EXPIRE,
+        algorithm: 'RS256'
+      }
+    );
   }
 
   public createRefreshToken(user: User) {
     return sign(
-      { email: user.email, tokenVersion: user.tokenVersion },
+      { email: user.email, userId: user.id, tokenVersion: user.tokenVersion },
       config.JWT.REFRESH_TOKEN_SECRET,
       {
         expiresIn: config.JWT.REFRESH_TOKEN_EXPIRE,

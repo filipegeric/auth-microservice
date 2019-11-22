@@ -31,7 +31,7 @@ export async function authMiddleware(
       throw new HttpError(401, 'Token invalid');
     }
     const token = req.headers.authorization.split(' ')[1];
-    const decoded = await verifyTokenAsync<{ email: string }>(
+    const decoded = await verifyTokenAsync<{ email: string; userId: string }>(
       token,
       config.JWT.ACCESS_TOKEN_PUBLIC
     );
@@ -39,10 +39,11 @@ export async function authMiddleware(
     if (typeof decoded !== 'object') {
       return res.status(401).send({ message: 'Token payload invalid' });
     }
-    if (!('email' in decoded)) {
+    if (!('email' in decoded) || !('userId' in decoded)) {
       return res.status(401).send({ message: 'Token payload invalid' });
     }
     (req as any).email = decoded.email;
+    (req as any).userId = decoded.userId;
     return next();
   } catch (error) {
     logger.error(error);
