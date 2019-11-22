@@ -42,7 +42,6 @@ docker-compose up
 
 ## TODO
 
-1. tests
-2. admin routes accesible with API key
-3. API docs
-4. client library
+1. admin routes accesible with API key
+2. client library
+3. Email template

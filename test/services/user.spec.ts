@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
 import { internet, name } from 'faker';
 import { stub } from 'sinon';
 import { Repository } from 'typeorm';
@@ -41,17 +41,39 @@ describe('UserService', () => {
   });
 
   describe('createUser', () => {
-    it('throws if there is already a user with provided email', () => {
-      throw new Error('Not implemented yet');
+    it('throws if there is already a user with provided email', async () => {
+      const email = internet.email();
+      userRepository.findOne = () => Promise.resolve({ email } as User);
+      try {
+        await service.createUser(email, internet.password(), name.findName());
+        assert(false, "It didn't throw an exception");
+      } catch (error) {
+        assert(error);
+      }
     });
-    it('throws if there is already a user with provided email', () => {
-      throw new Error('Not implemented yet');
+    it('creates user with hashed password', async () => {
+      const email = internet.email();
+      userRepository.findOne = () => Promise.resolve(undefined);
+      userRepository.create = () => ({ email } as any);
+      userRepository.save = (a: any) => Promise.resolve(a);
+
+      const createStub = stub(userRepository, 'create');
+
+      await service.createUser(email, internet.password(), name.findName());
+
+      assert(createStub.calledOnce);
     });
-    it('creates user with hashed password', () => {
-      throw new Error('Not implemented yet');
-    });
-    it('saves user in database', () => {
-      throw new Error('Not implemented yet');
+    it('saves user in database', async () => {
+      const email = internet.email();
+      userRepository.findOne = () => Promise.resolve(undefined);
+      userRepository.create = () => ({ email } as any);
+      userRepository.save = (a: any) => Promise.resolve(a);
+
+      const saveStub = stub(userRepository, 'save');
+
+      await service.createUser(email, internet.password(), name.findName());
+
+      assert(saveStub.calledOnce);
     });
   });
 });
