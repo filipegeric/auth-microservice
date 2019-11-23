@@ -44,4 +44,3 @@ docker-compose up
 
 1. admin routes accesible with API key
 2. client library
-3. Email template

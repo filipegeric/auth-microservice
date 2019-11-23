@@ -2,6 +2,7 @@ import 'reflect-metadata';
 
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import { config as dotenvConfig } from 'dotenv';
 import express from 'express';
 import { configure, getLogger } from 'log4js';
@@ -36,6 +37,7 @@ createConnection()
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
+    app.use(cors({ origin: config.CORS_ORIGIN, credentials: true }));
 
     app.use(authMiddleware);
 
