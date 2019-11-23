@@ -1,4 +1,6 @@
+import { readFile } from 'fs';
 import { Transporter } from 'nodemailer';
+import { join } from 'path';
 
 import { config } from '../config';
 
@@ -17,8 +19,20 @@ export class EmailService {
     });
   }
 
-  private async getPasswordResetHtml(code: number) {
-    return `reset code: <b>${code}</b>`;
+  private getPasswordResetHtml(code: number) {
+    return new Promise<string>((resolve, reject) => {
+      readFile(
+        join(__dirname + './../templates/password-reset-email.html'),
+        (err, data) => {
+          if (err) {
+            return reject(err);
+          }
+          let template = data.toString();
+          template = template.replace('[CODE]', code.toString());
+          return resolve(template);
+        }
+      );
+    });
   }
 
   private getPasswordResetText(code: number) {
