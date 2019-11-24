@@ -11,6 +11,9 @@ export class UserController {
     if (!user) {
       throw new HttpError(404, 'No such user');
     }
+    delete user.isGoogleUser;
+    delete user.password;
+    delete user.tokenVersion;
     return {
       status: 200,
       data: user
